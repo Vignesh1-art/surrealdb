@@ -444,11 +444,12 @@ impl Iterator {
 	) -> Result<(), Error> {
 		if let Some(fetchs) = stm.fetch() {
 			for fetch in fetchs.iter() {
+				let value = fetch.compute(stk, ctx, opt, None).await?;
 				let mut values = self.results.take()?;
 				// Loop over each result value
 				for obj in &mut values {
 					// Fetch the value at the path
-					stk.run(|stk| obj.fetch(stk, ctx, opt, fetch)).await?;
+					stk.run(|stk| obj.fetch(stk, ctx, opt, value)).await?;
 				}
 				self.results = values.into();
 			}

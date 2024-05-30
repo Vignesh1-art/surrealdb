@@ -37,11 +37,11 @@ impl OutputStatement {
 		// Process the output value
 		let mut val = self.what.compute(stk, ctx, opt, doc).await?;
 		// Fetch any
-		if let Some(fetchs) = &self.fetch {
-			for fetch in fetchs.iter() {
-				val.fetch(stk, ctx, opt, fetch).await?;
-			}
-		}
+		// if let Some(fetchs) = &self.fetch {
+		// 	for fetch in fetchs.iter() {
+		// 		val.fetch(stk, ctx, opt, fetch).await?;
+		// 	}
+		// }
 		//
 		Ok(val)
 	}
