@@ -107,8 +107,11 @@ impl Parser<'_> {
 		if !self.eat(t!("FETCH")) {
 			return Ok(None);
 		}
-		let v = self.parse_idiom_list(ctx).await?.into_iter().map(Fetch).collect();
-		Ok(Some(Fetchs(v)))
+		let mut fetchs = vec![Fetch(self.parse_value_field(ctx).await?)];
+		while self.eat(t!(",")) {
+			fetchs.push(Fetch(self.parse_value_field(ctx).await?));
+		}
+		Ok(Some(Fetchs(fetchs)))
 	}
 
 	pub async fn try_parse_condition(&mut self, ctx: &mut Stk) -> ParseResult<Option<Cond>> {
