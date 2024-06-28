@@ -95,7 +95,7 @@ static SOURCE: &str = r#"
 	THROW 1s;
 	INSERT IGNORE INTO $foo (a,b,c) VALUES (1,2,3),(4,5,6) ON DUPLICATE KEY UPDATE a.b +?= null, c.d += none RETURN AFTER;
 	KILL u"e72bee20-f49b-11ec-b939-0242ac120002";
-	RETURN RETRUN FETCH RETURN;
+	RETURN RETRUN FETCH RETRUN;
 	RELATE ONLY [1,2]->a:b->(CREATE foo) UNIQUE SET a += 1 RETURN NONE PARALLEL;
 	REMOVE FUNCTION fn::foo::bar();
 	REMOVE FIELD foo.bar[10] ON bar;
@@ -502,7 +502,7 @@ fn statements() -> Vec<Statement> {
 			start: Some(Start(Value::Object(Object(
 				[("a".to_owned(), Value::Bool(true))].into_iter().collect(),
 			)))),
-			fetch: Some(Fetchs(vec![Fetch(Idiom(vec![Part::Field(Ident("foo".to_owned()))]))])),
+			fetch: Some(Fetchs(vec![Fetch(Value::Idiom(Idiom(vec![Part::Field(Ident("foo".to_owned()))])))])),
 			version: Some(Version(Datetime(expected_datetime))),
 			timeout: None,
 			parallel: false,
@@ -590,9 +590,9 @@ fn statements() -> Vec<Statement> {
 		}),
 		Statement::Output(OutputStatement {
 			what: Value::Idiom(Idiom(vec![Part::Field(Ident("RETRUN".to_owned()))])),
-			fetch: Some(Fetchs(vec![Fetch(Idiom(vec![Part::Field(
-				Ident("RETURN".to_owned()).to_owned(),
-			)]))])),
+			fetch: Some(Fetchs(vec![Fetch(Value::Idiom(Idiom(vec![Part::Field(
+				Ident("RETRUN".to_owned()).to_owned(),
+			)])))])),
 		}),
 		Statement::Relate(RelateStatement {
 			only: true,
